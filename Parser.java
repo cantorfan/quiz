@@ -14,24 +14,23 @@ public class Parser {
     return file;
   }
   public String getContent() throws IOException {
-    FileInputStream i = new FileInputStream(file);
-    String output = "";
-    int data;
-    while ((data = i.read()) > 0) {
-      output += (char) data;
-    }
-    return output;
+    return readData(0);
   }
   public String getContentWithoutUnicode() throws IOException {
-    FileInputStream i = new FileInputStream(file);
-    String output = "";
-    int data;
-    while ((data = i.read()) > 0) {
-      if (data < 0x80) {
-        output += (char) data;
-      }
-    }
-    return output;
+    return readData(0x80);
+  }
+  
+  private String readData( int charRange) throws IOException
+  {
+	  FileInputStream i = new FileInputStream(file);
+	    String output = "";
+	    int data;
+	    while ((data = i.read()) > 0) {
+	      if (charRange == 0 || charRange != 0 && data < charRange) {
+	        output += (char) data;
+	      }
+	    }
+	    return output;
   }
   public void saveContent(String content) throws IOException {
     FileOutputStream o = new FileOutputStream(file);
